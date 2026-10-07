@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nuestros Residuos · Tablero de indicadores</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bosque:#1F4A42; --bosque-2:#173a34; --oliva:#EAE79A; --terracota:#D2704C; --menta:#8FC0B5;
+  --fondo:#1F4A42; --tarjeta:#F1F6EE; --texto:#1c2b27; --suave:#5b6b66; --linea:#d5ddd9;
+  --ok:#1F4A42; --medio:#B9A93A; --bajo:#C0583A;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--fondo);color:var(--texto);font-family:'Nunito',system-ui,sans-serif;font-size:15px;line-height:1.45}
+h1,h2,h3,.big{font-family:'Baloo 2','Nunito',sans-serif}
+header{background:var(--bosque-2);color:#fff;padding:22px 32px 0}
+.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:12px}
+.logo{width:34px;height:34px;border-radius:9px;background:var(--oliva);display:grid;place-items:center}
+.logo i{width:12px;height:12px;border-radius:50%;background:var(--bosque);display:block}
+.wordmark{font-family:'Baloo 2';font-weight:700;font-size:22px;color:var(--oliva);letter-spacing:.2px}
+.titulo{margin:14px 0 4px;font-size:30px;font-weight:800;line-height:1.1}
+.sub{color:var(--menta);margin:0 0 18px;max-width:900px}
+.chips{display:flex;gap:10px;flex-wrap:wrap}
+.chip{border:1px solid rgba(234,231,154,.5);color:var(--oliva);padding:4px 12px;border-radius:99px;font-weight:700;font-size:13px}
+.chip b{color:#fff}
+nav{display:flex;gap:4px;flex-wrap:wrap;margin-top:6px}
+nav button{background:transparent;border:0;color:#cfe3dd;font:700 15px 'Nunito';padding:12px 20px;cursor:pointer;border-bottom:4px solid transparent}
+nav button:hover{color:#fff}
+nav button.on{color:#fff;border-bottom-color:var(--oliva);background:rgba(255,255,255,.07)}
+main{padding:28px 32px 40px;max-width:1280px;margin:0 auto}
+.narr{background:#F1F6EE;padding:14px 18px;margin-bottom:22px;border:1px solid var(--linea);border-left:6px solid var(--oliva)}
+.narr small{display:block;color:var(--suave);font-weight:700;text-transform:uppercase;letter-spacing:.6px;font-size:11px;margin-bottom:4px}
+.grid{display:grid;gap:18px}
+.g3{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.g2{grid-template-columns:repeat(auto-fit,minmax(480px,1fr))}
+.card{background:var(--tarjeta);border:1px solid var(--linea);border-radius:4px;padding:20px 22px;position:relative}
+.card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--c,var(--bosque))}
+.id{display:inline-block;font:800 12px 'Baloo 2';letter-spacing:.5px;background:var(--bosque);color:var(--oliva);padding:2px 9px;border-radius:3px}
+.ind{font-weight:700;margin:10px 0 6px}
+.big{font-size:56px;font-weight:800;line-height:1;color:var(--c,var(--bosque));margin:6px 0 2px}
+.big.m{font-size:44px}
+.big span{font-size:.45em;margin-left:2px}
+.estado{font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;color:var(--c)}
+.bar{position:relative;height:14px;background:#d9e5de;border-radius:2px;margin:30px 0 6px}
+.bar .f{height:100%;background:var(--c);border-radius:2px}
+.bar .mk{position:absolute;top:-6px;bottom:-6px;width:3px;background:var(--terracota)}
+.bar .mk em{position:absolute;top:-17px;left:50%;transform:translateX(-50%);font:700 11px 'Nunito';color:var(--terracota);white-space:nowrap;font-style:normal}
+.meta-l{display:flex;justify-content:space-between;color:var(--suave);font-size:12px}
+dl{margin:14px 0 0;font-size:13px;color:var(--suave);border-top:1px solid var(--linea);padding-top:10px}
+dt{font-weight:800;color:var(--texto);font-size:11px;text-transform:uppercase;letter-spacing:.5px;margin-top:6px}
+dd{margin:1px 0 0}
+.fase{margin:30px 0 10px;display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}
+.fase h3{margin:0;font-size:20px;color:var(--oliva)}
+.fase span{color:var(--menta);font-size:13px;font-weight:700}
+table{width:100%;border-collapse:collapse;background:#F1F6EE;border:1px solid var(--linea);font-size:13.5px}
+th{background:#2c6358;color:var(--oliva);text-align:left;padding:8px 12px;font:700 12px 'Nunito';text-transform:uppercase;letter-spacing:.5px}
+td{padding:9px 12px;border-top:1px solid var(--linea);vertical-align:top}
+td.id-c{white-space:nowrap}
+td.av{min-width:210px}
+.mb{height:10px;background:#d9e5de;border-radius:2px;position:relative}
+.mb .f{height:100%;border-radius:2px}
+.vv{font:800 15px 'Baloo 2';margin-top:2px}
+.nd{color:var(--suave);font-size:12px}
+.tag{display:inline-block;font-size:11px;font-weight:800;padding:2px 8px;border-radius:3px;text-transform:uppercase;letter-spacing:.4px}
+.t-ok{background:#d6ebe5;color:var(--bosque)}
+.t-mid{background:var(--oliva);color:#4d4710}
+.t-low{background:#f6d9cf;color:#8a3a20}
+.t-na{background:#e3e7e5;color:#4a5753}
+.sub-i{color:var(--suave);font-size:12px;margin-top:3px}
+footer{background:#12302b;color:#cfe3dd;padding:18px 32px;font-size:13px}
+footer b{color:var(--oliva)}
+@media(max-width:700px){header,main,footer{padding-left:16px;padding-right:16px}.g2{grid-template-columns:1fr}table{display:block;overflow-x:auto}.big{font-size:46px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="top">
+    <div class="brand"><div class="logo"><i></i></div><div class="wordmark">entorno a ti</div></div>
+    <div class="chips"><div class="chip">Periodo: <b id="periodo"></b></div><div class="chip">Actividades cumplidas: <b id="kact"></b></div></div>
+  </div>
+  <h1 class="titulo">Nuestros Residuos</h1>
+  <p class="sub">Tablero de indicadores de la MIR · economía circular con parroquias católicas, estudiantes UPAEP y Puebla Recicla A.C., noreste de Puebla</p>
+  <nav id="tabs"></nav>
+</header>
+<main id="main"></main>
+<footer>
+  <b>Fuente:</b> MIR_Nuestros_Residuos.xlsx, hoja "Nuestros Residuos", periodo <span id="periodo2"></span>. Cada indicador conserva el ID de la MIR (Fin.1, Prop.1, Comp.1, A1.1...) para actualizar valores sin ambigüedad. Un Componente se calcula como actividades de su fase con valor de 100% o más entre actividades programadas. A4.3 está pendiente de que ECOLANA entregue el indicador.
+</footer>
+<script>
+const PERIODO = "octubre de 2026";
+const D = [{"id": "Fin.1", "nivel": "Fin", "comp": "", "resumen": "Contribuir a la reducción de la presión sobre los rellenos sanitarios del noreste de Puebla mediante el fortalecimiento de un modelo comunitario de economía circular basado en la participación de estudiantes universitarios, parroquias católicas y una organización de recicladores asentada en la zona nororiente de la ciudad.", "ind": "% de personas (estudiantes, comunidad católica y vecinos) que separan sus residuos en casa", "met": "Personas que separan / total de personas encuestadas × 100", "med": "Cuestionario (P16): línea base, seguimiento y cierre", "meta": 75, "num": 60, "den": 100}, {"id": "Fin.2", "nivel": "Fin", "comp": "", "resumen": "(mismo resumen narrativo que Fin.1)", "ind": "% de recicladores que califican su trabajo como muy estable o algo estable", "met": "Recicladores que responden muy estable o algo estable / recicladores encuestados × 100", "med": "Cuestionario (P29C)", "meta": 15, "num": 6.7, "den": 100}, {"id": "Fin.3", "nivel": "Fin", "comp": "", "resumen": "(mismo resumen narrativo que Fin.1)", "ind": "% de personas para quienes el cuidado del medio ambiente es muy importante o importante como parte de su fe", "met": "Personas que responden muy importante o importante / personas encuestadas × 100", "med": "Cuestionario (P23)", "meta": 70, "num": 86.7, "den": 100}, {"id": "Prop.1", "nivel": "Propósito", "comp": "", "resumen": "Parroquias católicas, estudiantes universitarios y la organización de recicladores de base del noreste de Puebla (Puebla Recicla A.C.) participan activamente en un modelo comunitario de economía circular basado en valores compartidos.", "ind": "% de personas que participarían si la parroquia organizara actividades de reciclaje", "met": "Personas que responden sí participaría / personas encuestadas × 100", "med": "Cuestionario (P22)", "meta": 80, "num": 83, "den": 100}, {"id": "Prop.2", "nivel": "Propósito", "comp": "", "resumen": "(mismo resumen narrativo que Prop.1)", "ind": "% de personas que participan, con cualquier frecuencia, en actividades comunitarias relacionadas con el cuidado del medio ambiente", "met": "Personas con alguna frecuencia de participación distinta de nunca / personas encuestadas × 100", "med": "Cuestionario (P26)", "meta": 30, "num": 46.7, "den": 100}, {"id": "Prop.3", "nivel": "Propósito", "comp": "", "resumen": "(mismo resumen narrativo que Prop.1)", "ind": "% de recicladores que han participado en al menos una capacitación sobre reciclaje o economía circular", "met": "Recicladores que responden sí / recicladores encuestados × 100", "med": "Cuestionario (P30)", "meta": 50, "num": 36.7, "den": 100}, {"id": "Comp.1", "nivel": "Componente", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Fase 1, Descubrimiento y co-diseño, completada: actores mapeados, talleres co-diseñados y línea base levantada.", "ind": "% de actividades de la Fase 1 completadas", "met": "Actividades completadas / actividades programadas de la Fase 1 × 100", "med": "Reportes de avance, minutas", "meta": 100, "num": 8, "den": 9}, {"id": "Comp.2", "nivel": "Componente", "comp": "Comp.2 · Fase 2 Implementación temprana", "resumen": "Fase 2, Implementación temprana, completada: facilitadores universitarios capacitados e infraestructura de separación producida.", "ind": "% de actividades de la Fase 2 completadas", "met": "Actividades completadas / actividades programadas de la Fase 2 × 100", "med": "Reportes de avance, minutas", "meta": 100, "num": 3, "den": 6}, {"id": "Comp.3", "nivel": "Componente", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Fase 3, Implementación piloto, completada: parroquias activadas y organización de recicladores fortalecida.", "ind": "% de actividades de la Fase 3 completadas", "met": "Actividades completadas / actividades programadas de la Fase 3 × 100", "med": "Reportes de avance, minutas", "meta": 100, "num": 1, "den": 7}, {"id": "Comp.4", "nivel": "Componente", "comp": "Comp.4 · Fase 4 Evaluación y sistematización", "resumen": "Fase 4, Evaluación y sistematización, completada: evidencia generada y resultados comunicados.", "ind": "% de actividades de la Fase 4 completadas", "met": "Actividades completadas / actividades programadas de la Fase 4 × 100", "med": "Reportes de avance, minutas", "meta": 100, "num": 0, "den": 4}, {"id": "A1.1", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Mapeo de actores (parroquias y organización de recicladores) ejecutado.", "ind": "Mapeo de actores completado (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Mapa de actores realizado", "meta": 100, "num": 1, "den": 1}, {"id": "A1.2", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Parroquias piloto seleccionadas (15 parroquias, con participación de la diócesis).", "ind": "% de parroquias seleccionadas", "met": "Parroquias seleccionadas / parroquias meta (15) × 100", "med": "Mapeo de parroquias y capillas participantes", "meta": 100, "num": 15, "den": 15}, {"id": "A1.3", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Socios del proyecto vinculados y alineados.", "ind": "% de reuniones de vinculación realizadas", "met": "Reuniones realizadas / reuniones programadas × 100", "med": "Minutas/bitácoras de campo, registro fotográfico", "meta": 100, "num": 3, "den": 3}, {"id": "A1.4", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Visitas de campo a parroquias y a la organización de recicladores.", "ind": "% de visitas de campo realizadas", "met": "Visitas realizadas / visitas programadas × 100", "med": "Bitácoras de campo, evidencia fotográfica", "meta": 100, "num": 5, "den": 5}, {"id": "A1.5", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Acercamiento con clero local y líderes de recicladores.", "ind": "% de reuniones de vinculación realizadas", "met": "Reuniones realizadas / reuniones programadas × 100", "med": "Minutas/bitácoras de campo, registro fotográfico", "meta": 100, "num": 3, "den": 3}, {"id": "A1.6", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Establecimiento de colaboración con autoridades municipales de residuos.", "ind": "% de reuniones realizadas", "met": "Reuniones realizadas / reuniones proyectadas × 100", "med": "Acta de reunión / registro fotográfico", "meta": 100, "num": 0, "den": 1}, {"id": "A1.7", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Manual/cuadernillo para capacitaciones co-diseñado con el Instituto de Promoción del Bien Común y grupo académico de la UPAEP.", "ind": "Manual para capacitaciones, co-diseñado con IPBC/UPAEP, concluido (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Correo con manual concluido y entregado para uso en capacitaciones", "meta": 100, "num": 1, "den": 1}, {"id": "A1.8", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Infraestructura de separación de residuos para parroquias diseñada.", "ind": "% de componentes de diseño desarrollados", "met": "Componentes desarrollados / componentes requeridos × 100", "med": "Documento técnico de diseño, evidencia fotográfica", "meta": 100, "num": 1, "den": 1}, {"id": "A1.9", "nivel": "Actividad", "comp": "Comp.1 · Fase 1 Descubrimiento y co-diseño", "resumen": "Levantamiento de la encuesta de línea base (MEL).", "ind": "Línea base levantada (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Reporte de la encuesta de línea base", "meta": 100, "num": 1, "den": 1}, {"id": "A2.1", "nivel": "Actividad", "comp": "Comp.2 · Fase 2 Implementación temprana", "resumen": "Estudiantes de la UPAEP capacitados como facilitadores ambientales.", "ind": "% de estudiantes capacitados", "met": "Estudiantes capacitados / estudiantes programados (30-50) × 100", "med": "Listas de asistencia UPAEP, constancias y/o cartas de inscripción a servicio social firmadas por ETI", "meta": 100, "num": 70, "den": 45}, {"id": "A2.1b", "nivel": "Actividad", "comp": "Comp.2 · Fase 2 Implementación temprana", "resumen": "Capacitación de estudiantes evaluada.", "ind": "% de estudiantes que califican la capacitación como muy útil o algo útil", "met": "Estudiantes que responden muy útil o algo útil / estudiantes encuestados × 100", "med": "Cuestionario de línea base / seguimiento (P32)", "meta": 70, "num": 33.3, "den": 100}, {"id": "A2.2", "nivel": "Actividad", "comp": "Comp.2 · Fase 2 Implementación temprana", "resumen": "Contenidos diseñados para su uso en comunidades católicas.", "ind": "% de contenidos diseñados", "met": "Contenidos diseñados / contenidos programados × 100", "med": "Materiales producidos por UPAEP aprobados", "meta": 100, "num": 3, "den": 3}, {"id": "A2.3", "nivel": "Actividad", "comp": "Comp.2 · Fase 2 Implementación temprana", "resumen": "Participación de los recicladores de base en las capacitaciones de la iglesia.", "ind": "% de participaciones realizadas", "met": "Participaciones efectivas / participaciones proyectadas × 100", "med": "Evidencia fotográfica / reporte de capacitaciones", "meta": 100, "num": 0, "den": 15}, {"id": "A2.4", "nivel": "Actividad", "comp": "Comp.2 · Fase 2 Implementación temprana", "resumen": "Infraestructura de separación de residuos producida.", "ind": "% de infraestructura producida", "met": "Contenedores producidos / contenedores programados × 100", "med": "Inventario, evidencia fotográfica, facturas de producción", "meta": 100, "num": 51, "den": 45}, {"id": "A2.5", "nivel": "Actividad", "comp": "Comp.2 · Fase 2 Implementación temprana", "resumen": "Evaluación de seguimiento MEL aplicada.", "ind": "Encuesta de seguimiento levantada (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Reporte encuesta de seguimiento", "meta": 100, "num": 0, "den": 1}, {"id": "A3.1", "nivel": "Actividad", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Capacitaciones sobre separación de residuos impartidas en parroquias.", "ind": "% de capacitaciones realizadas", "met": "Capacitaciones realizadas / capacitaciones programadas × 100", "med": "Listas de asistencia, evidencia fotográfica", "meta": 100, "num": 10, "den": 45}, {"id": "A3.2", "nivel": "Actividad", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Infraestructura de separación en parroquias piloto instalada.", "ind": "% de parroquias con infraestructura instalada", "met": "Parroquias con instalación / parroquias piloto × 100", "med": "Reporte de instalación, evidencia fotográfica", "meta": 100, "num": 11, "den": 15}, {"id": "A3.4", "nivel": "Actividad", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Gobernanza organizativa de Puebla Recicla A.C. fortalecida.", "ind": "Acciones de gobernanza implementadas (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Actas de Puebla Recicla A.C.", "meta": 100, "num": 0, "den": 1}, {"id": "A3.5", "nivel": "Actividad", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Equipo de seguridad y herramientas de trabajo entregado.", "ind": "% de equipos entregados", "met": "Equipo entregado / equipos por entregar × 100", "med": "Evidencia fotográfica", "meta": 100, "num": 0, "den": 15}, {"id": "A3.6", "nivel": "Actividad", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Apoyo para el Centro Comunitario de Valorización de Residuos (CCVR) de Puebla Recicla.", "ind": "Apoyo al CCVR entregado (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Proyecto constructivo, presentación del proyecto, evidencia de entrega del apoyo (facturas), evidencia fotográfica evento de inauguración", "meta": 100, "num": 1, "den": 1}, {"id": "A3.8", "nivel": "Actividad", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Proyecto presentado a autoridades locales.", "ind": "% de autoridades objetivo que recibieron la presentación", "met": "Autoridades que recibieron la presentación / autoridades objetivo × 100", "med": "Minutas, acuses de recibo, evidencia fotográfica", "meta": 100, "num": 0, "den": 3}, {"id": "A3.9", "nivel": "Actividad", "comp": "Comp.3 · Fase 3 Implementación piloto", "resumen": "Encuesta de seguimiento aplicada.", "ind": "Encuesta de seguimiento levantada (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Reporte encuesta de seguimiento", "meta": 100, "num": 0, "den": 1}, {"id": "A4.1", "nivel": "Actividad", "comp": "Comp.4 · Fase 4 Evaluación y sistematización", "resumen": "Evaluación final (endline) aplicada.", "ind": "Encuesta endline aplicada (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Reporte final de resultados", "meta": 100, "num": 0, "den": 1}, {"id": "A4.2", "nivel": "Actividad", "comp": "Comp.4 · Fase 4 Evaluación y sistematización", "resumen": "Evaluación de las acciones del programa completada.", "ind": "Documento de evaluación final del proyecto concluido (hecho / no hecho)", "met": "Hecho = 1, no hecho = 0", "med": "Informe de evaluación", "meta": 100, "num": 0, "den": 1}, {"id": "A4.3", "nivel": "Actividad", "comp": "Comp.4 · Fase 4 Evaluación y sistematización", "resumen": "Incremento en el volumen de material reciclable recibido por la organización de recicladores cuantificado.", "ind": "Incremento en el volumen de material recibido en el periodo (por definir)", "met": "Indicador ECOLANA (pendiente)", "med": "Bitácoras de Puebla Recicla A.C. / indicadores de ECOLANA", "meta": 100, "num": null, "den": null}, {"id": "A4.4", "nivel": "Actividad", "comp": "Comp.4 · Fase 4 Evaluación y sistematización", "resumen": "Resultados comunicados a autoridades municipales y/o medios.", "ind": "% de actores informados", "met": "Actores informados / actores seleccionados × 100", "med": "Registro de asistencia, fotografías, correos electrónicos, acuses, participación en Foro Voces del Territorio", "meta": 100, "num": 0, "den": 1}];
+D.forEach(r=>{
+  r.val = (r.num===null||r.den===null||r.den===0)?null:r.num/r.den*100;
+});
+const acts = D.filter(r=>r.nivel==="Actividad");
+D.filter(r=>r.nivel==="Componente").forEach(c=>{
+  const a = acts.filter(x=>x.comp===c.comp);
+  c.den = a.length; c.num = a.filter(x=>x.val!==null&&x.val>=100).length; c.val = c.den?c.num/c.den*100:null;
+});
+const fmt = v => v===null?"—":v.toLocaleString("es-MX",{minimumFractionDigits:1,maximumFractionDigits:1});
+const fmtn = v => v===null?"—":v.toLocaleString("es-MX",{maximumFractionDigits:1});
+function est(r){
+  if(r.val===null) return {c:"var(--suave)",t:"Por definir",k:"t-na"};
+  if(r.val>=r.meta) return {c:"var(--ok)",t:"Meta alcanzada",k:"t-ok"};
+  if(r.val>0) return {c:"var(--medio)",t:"En proceso",k:"t-mid"};
+  return {c:"var(--bajo)",t:"Sin avance",k:"t-low"};
+}
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;");
+const hecho = r => r.met.startsWith("Hecho =");
+
+function estrategico(nivel){
+  const L = D.filter(r=>r.nivel===nivel);
+  const narr = L[0].resumen;
+  let h = `<div class="narr"><small>${nivel==="Fin"?"Fin":"Propósito"}</small>${esc(narr)}</div><div class="grid g3">`;
+  L.forEach(r=>{
+    const e=est(r), w=Math.min(r.val,100);
+    h+=`<div class="card" style="--c:${e.c}">
+      <span class="id">${r.id}</span>
+      <div class="ind">${esc(r.ind)}</div>
+      <div class="big">${fmt(r.val)}<span>%</span></div>
+      <div class="estado">${e.t}</div>
+      <div class="bar"><div class="f" style="width:${w}%"></div><div class="mk" style="left:${r.meta}%"><em>meta ${fmtn(r.meta)}%</em></div></div>
+      <div class="meta-l"><span>0%</span><span>100%</span></div>
+      <dl><dt>Método de cálculo</dt><dd>${esc(r.met)}</dd><dt>Medio de verificación</dt><dd>${esc(r.med)}</dd></dl>
+    </div>`;
+  });
+  return h+"</div>";
+}
+
+function componentes(){
+  const L = D.filter(r=>r.nivel==="Componente");
+  let h=`<div class="grid g2">`;
+  L.forEach(r=>{
+    const e=est(r);
+    h+=`<div class="card" style="--c:${e.c}">
+      <span class="id">${r.id}</span> <span class="nd" style="margin-left:6px">${esc(r.comp.split("·")[1].trim())}</span>
+      <p class="ind">${esc(r.resumen)}</p>
+      <div class="big m">${fmt(r.val)}<span>%</span></div>
+      <div class="estado">${r.num} de ${r.den} actividades cumplidas</div>
+      <div class="bar"><div class="f" style="width:${Math.min(r.val,100)}%"></div></div>
+      <dl><dt>Indicador</dt><dd>${esc(r.ind)}</dd><dt>Método de cálculo</dt><dd>${esc(r.met)}</dd><dt>Medio de verificación</dt><dd>${esc(r.med)}</dd></dl>
+    </div>`;
+  });
+  return h+"</div>";
+}
+
+function actividades(){
+  const comps = D.filter(r=>r.nivel==="Componente");
+  let h="";
+  comps.forEach(c=>{
+    const L = acts.filter(a=>a.comp===c.comp);
+    h+=`<div class="fase"><h3>${esc(c.comp.replace(" · "," · "))}</h3><span>${c.num} de ${c.den} actividades cumplidas · ${fmt(c.val)}%</span></div>
+    <table><thead><tr><th>ID</th><th>Actividad e indicador</th><th>Avance</th><th>Verificación</th></tr></thead><tbody>`;
+    L.forEach(a=>{
+      const e=est(a);
+      let av;
+      if(a.val===null) av=`<span class="tag t-na">Por definir</span><div class="sub-i">Indicador pendiente de ECOLANA</div>`;
+      else if(hecho(a)) av=`<span class="tag ${a.val>=100?'t-ok':'t-low'}">${a.val>=100?'Hecho':'No hecho'}</span>`;
+      else {
+        const sobre=a.val>100?` <span class="tag t-ok">Sobrecumplimiento</span>`:"";
+        av=`<div class="mb"><div class="f" style="width:${Math.min(a.val/ (a.meta||100)*100,100)}%;background:${e.c}"></div></div>
+            <div class="vv" style="color:${e.c}">${fmt(a.val)}%${sobre}</div>
+            <div class="nd">${fmtn(a.num)} de ${fmtn(a.den)}${a.meta!==100?` · meta ${fmtn(a.meta)}%`:""}</div>`;
+      }
+      h+=`<tr><td class="id-c"><span class="id">${a.id}</span></td>
+        <td><b>${esc(a.resumen)}</b><div class="sub-i">${esc(a.ind)} · ${esc(a.met)}</div></td>
+        <td class="av">${av}</td><td class="nd">${esc(a.med)}</td></tr>`;
+    });
+    h+=`</tbody></table>`;
+  });
+  return h;
+}
+
+const TABS=[["Fin",()=>estrategico("Fin")],["Propósito",()=>estrategico("Propósito")],["Componentes",componentes],["Actividades",actividades]];
+const nav=document.getElementById("tabs"), main=document.getElementById("main");
+function show(i){
+  [...nav.children].forEach((b,k)=>b.classList.toggle("on",k===i));
+  main.innerHTML=TABS[i][1](); location.hash=TABS[i][0];
+}
+TABS.forEach((t,i)=>{const b=document.createElement("button");b.textContent=t[0];b.onclick=()=>show(i);nav.appendChild(b)});
+document.getElementById("periodo").textContent=PERIODO;
+document.getElementById("periodo2").textContent=PERIODO;
+const cum=acts.filter(a=>a.val!==null&&a.val>=100).length;
+document.getElementById("kact").textContent=cum+" de "+acts.length;
+const h0=TABS.findIndex(t=>t[0]===decodeURIComponent(location.hash.slice(1)));
+show(h0<0?0:h0);
+</script>
+</body>
+</html>
