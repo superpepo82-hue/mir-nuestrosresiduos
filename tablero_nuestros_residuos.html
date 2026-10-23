@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tablero de Indicadores - Nuestros Residuos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700;800&family=Nunito:ital,wght@0,400;0,600;0,700;0,800;1,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --forest:#1F4A42;
+    --forest-dark:#153631;
+    --cream:#EAE79A;
+    --cream-soft:#F5F4DE;
+    --terracota:#D2704C;
+    --mint:#8FC0B5;
+    --gold:#B9923D;
+    --ink:#1c2624;
+    --paper:#FBFBF7;
+    --card:#FFFFFF;
+    --line:#E1E3D6;
+    --muted:#6B7570;
+    --radius:8px;
+    --shadow: 0 1px 2px rgba(21,54,49,.06), 0 4px 14px rgba(21,54,49,.06);
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:var(--paper);color:var(--ink);font-family:'Nunito',sans-serif;-webkit-font-smoothing:antialiased;}
+  h1,h2,h3,h4,.brand-word,.tabbtn{font-family:'Baloo 2',sans-serif;}
+
+  header.topbar{background:var(--forest);color:var(--cream);padding:22px 28px 0 28px;}
+  .brandrow{display:flex;align-items:center;gap:12px;margin-bottom:18px;}
+  .logo-icon{width:34px;height:34px;border-radius:9px;background:var(--cream);position:relative;flex:none;}
+  .logo-icon::after{content:"";position:absolute;top:50%;left:50%;width:10px;height:10px;background:var(--forest);border-radius:50%;transform:translate(-50%,-50%);}
+  .brand-word{font-size:15px;letter-spacing:.5px;font-weight:700;color:var(--cream);text-transform:lowercase;opacity:.9;}
+  .titleblock h1{margin:0 0 3px 0;font-size:26px;font-weight:700;color:#fff;}
+  .titleblock p{margin:0 0 18px 0;font-size:14px;color:var(--mint);font-weight:600;max-width:760px;}
+  nav.tabs{display:flex;gap:4px;flex-wrap:wrap;}
+  .tabbtn{background:transparent;border:none;color:rgba(234,231,154,.65);font-size:15px;font-weight:600;padding:12px 18px;cursor:pointer;border-bottom:3px solid transparent;transition:.15s;}
+  .tabbtn:hover{color:var(--cream);}
+  .tabbtn.active{color:var(--cream);border-bottom:3px solid var(--terracota);}
+
+  main{max-width:1180px;margin:0 auto;padding:34px 28px 60px 28px;}
+  .panel{display:none;}
+  .panel.active{display:block;}
+  .level-intro{margin-bottom:26px;}
+  .level-intro h2{font-size:22px;margin:0 0 6px 0;color:var(--forest-dark);}
+  .level-intro p{margin:0;color:var(--muted);font-size:14.5px;max-width:760px;line-height:1.5;}
+
+  .strategic-narrative{background:var(--forest);color:var(--cream-soft);border-radius:var(--radius);padding:20px 24px;margin-bottom:26px;font-size:15px;line-height:1.55;}
+  .strategic-narrative b{color:#fff;}
+  .strategic-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(300px,1fr));gap:20px;}
+  .strategic-card{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--terracota);border-radius:var(--radius);box-shadow:var(--shadow);padding:22px 24px 24px 24px;}
+  .strategic-card.tone-mint{border-top-color:var(--mint);}
+  .strategic-card .idtag{display:inline-block;font-size:11.5px;font-weight:800;letter-spacing:.4px;color:var(--terracota);background:#FBEDE6;padding:3px 9px;border-radius:5px;margin-bottom:10px;}
+  .tone-mint .idtag{color:#3D6D62;background:#EBF4F1;}
+  .strategic-card .ind-name{font-size:15.5px;font-weight:700;color:var(--ink);line-height:1.35;margin:0 0 18px 0;min-height:42px;}
+  .bignum-row{display:flex;align-items:baseline;gap:10px;margin-bottom:10px;}
+  .bignum{font-family:'Baloo 2',sans-serif;font-size:44px;font-weight:700;color:var(--forest-dark);line-height:1;}
+  .bignum.nodata{font-size:30px;color:var(--muted);}
+  .goal{font-size:12.5px;color:var(--muted);font-weight:700;margin-top:8px;}
+  .barwrap{background:#EEF0E6;border-radius:5px;height:10px;overflow:hidden;position:relative;}
+  .barfill{height:100%;background:var(--terracota);border-radius:5px;}
+  .tone-mint .barfill{background:var(--mint);}
+
+  .comp-grid{display:grid;grid-template-columns:repeat(auto-fit, minmax(330px,1fr));gap:18px;}
+  .comp-card{background:var(--card);border:1px solid var(--line);border-left:6px solid var(--forest);border-radius:var(--radius);box-shadow:var(--shadow);padding:18px 20px;}
+  .comp-card.c2{border-left-color:var(--terracota);}
+  .comp-card.c3{border-left-color:var(--mint);}
+  .comp-card.c4{border-left-color:var(--gold);}
+  .comp-card .idtag{font-size:11px;font-weight:800;letter-spacing:.4px;color:var(--forest);margin-bottom:6px;display:block;}
+  .comp-card.c2 .idtag{color:var(--terracota);}
+  .comp-card.c3 .idtag{color:#3D6D62;}
+  .comp-card.c4 .idtag{color:var(--gold);}
+  .comp-card h3{margin:0 0 10px 0;font-size:16.5px;color:var(--ink);line-height:1.3;}
+  .comp-field{margin-bottom:10px;}
+  .comp-field .label{font-size:10.5px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);font-weight:800;margin-bottom:3px;}
+  .comp-field .value{font-size:13.5px;color:var(--ink);line-height:1.45;}
+  .comp-progress-row{display:flex;align-items:center;gap:10px;margin-top:14px;}
+  .comp-progress-row .pct{font-family:'Baloo 2',sans-serif;font-weight:700;font-size:19px;color:var(--forest-dark);min-width:56px;}
+  .comp-sub{font-size:11.5px;color:var(--muted);margin-top:6px;}
+  .comp-card .barwrap{height:8px;flex:1;}
+  .comp-card.c2 .barfill{background:var(--terracota);}
+  .comp-card.c3 .barfill{background:var(--mint);}
+  .comp-card.c4 .barfill{background:var(--gold);}
+  .comp-card:not(.c2):not(.c3):not(.c4) .barfill{background:var(--forest);}
+
+  .act-group{margin-bottom:28px;}
+  .act-group-head{display:flex;align-items:center;gap:10px;margin-bottom:8px;}
+  .act-group-head .dot{width:11px;height:11px;border-radius:3px;background:var(--forest);flex:none;}
+  .act-group.c2 .dot{background:var(--terracota);}
+  .act-group.c3 .dot{background:var(--mint);}
+  .act-group.c4 .dot{background:var(--gold);}
+  .act-group-head h3{margin:0;font-size:16px;color:var(--ink);}
+  .act-group-head .compid{font-size:11.5px;color:var(--muted);font-weight:700;}
+  table.act-table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:13px;}
+  table.act-table thead th{text-align:left;background:#F3F4EC;color:var(--muted);font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;font-weight:800;padding:9px 14px;border-bottom:1px solid var(--line);}
+  table.act-table td{padding:9px 14px;border-bottom:1px solid var(--line);vertical-align:middle;color:var(--ink);}
+  table.act-table tr:last-child td{border-bottom:none;}
+  table.act-table tr:hover td{background:#FAFAF4;}
+  .act-id{font-weight:800;color:var(--forest-dark);font-size:12.5px;white-space:nowrap;}
+  .act-name{font-weight:600;max-width:280px;}
+  .act-ind{color:var(--muted);font-size:12.5px;max-width:280px;}
+  .act-bar-cell{min-width:150px;}
+  .act-bar-row{display:flex;align-items:center;gap:8px;}
+  .act-barwrap{flex:1;background:#EEF0E6;height:7px;border-radius:4px;overflow:hidden;}
+  .act-barfill{height:100%;background:var(--forest);}
+  .act-group.c2 .act-barfill{background:var(--terracota);}
+  .act-group.c3 .act-barfill{background:var(--mint);}
+  .act-group.c4 .act-barfill{background:var(--gold);}
+  .act-pct{font-size:12px;font-weight:800;min-width:40px;text-align:right;color:var(--ink);}
+  .act-frac{font-size:11px;color:var(--muted);margin-top:2px;}
+
+  .total-card{background:var(--card);border:1px solid var(--line);border-top:5px solid var(--forest);border-radius:var(--radius);box-shadow:var(--shadow);padding:26px 28px;margin-bottom:26px;}
+  .total-main{display:flex;align-items:baseline;gap:16px;flex-wrap:wrap;margin-bottom:14px;}
+  .total-num{font-family:'Baloo 2',sans-serif;font-size:64px;font-weight:700;color:var(--forest-dark);line-height:1;}
+  .total-lbl{font-size:15px;color:var(--muted);font-weight:700;}
+  .total-bar{height:14px;margin-bottom:16px;}
+  .total-bar .barfill{background:var(--forest);}
+  .total-method{font-size:13px;line-height:1.5;color:var(--ink);margin-bottom:8px;}
+  .total-alt{font-size:12.5px;color:var(--muted);}
+  footer{max-width:1180px;margin:0 auto;padding:16px 28px 40px 28px;color:var(--muted);font-size:12px;line-height:1.6;border-top:1px solid var(--line);}
+  footer b{color:var(--terracota);}
+  footer .warn{color:var(--terracota);font-weight:700;}
+  footer ul{margin:6px 0 0 0;padding-left:18px;}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="brandrow">
+    <div class="logo-icon"></div>
+    <span class="brand-word">entorno a ti</span>
+  </div>
+  <div class="titleblock">
+    <h1>Tablero de Indicadores &middot; Nuestros Residuos</h1>
+    <p>Modelo comunitario de economía circular en el noreste de Puebla. Con Periodo 1, octubre de 2026.</p>
+  </div>
+  <nav class="tabs" id="tabsNav">
+    <button class="tabbtn active" data-tab="fin">Fin</button>
+    <button class="tabbtn" data-tab="proposito">Propósito</button>
+    <button class="tabbtn" data-tab="componentes">Componentes</button>
+    <button class="tabbtn" data-tab="actividades">Actividades</button>
+    <button class="tabbtn" data-tab="avance">Avance total</button>
+  </nav>
+</header>
+
+<main>
+
+  <section id="fin" class="panel active">
+    <div class="level-intro">
+      <h2>Fin</h2>
+      <p>Indicadores estratégicos de nivel superior: cambios de largo plazo a los que el proyecto busca contribuir.</p>
+    </div>
+    <div class="strategic-narrative">
+      <b>Resumen narrativo:</b> Contribuir a la reducción de la presión sobre los rellenos sanitarios del noreste de Puebla mediante el fortalecimiento de un modelo comunitario de economía circular basado en la participación de estudiantes universitarios, parroquias católicas y una organización de recicladores asentada en la zona nororiente de la ciudad.
+    </div>
+    <div class="strategic-grid" id="finGrid"></div>
+  </section>
+
+  <section id="proposito" class="panel">
+    <div class="level-intro">
+      <h2>Propósito</h2>
+      <p>Efecto directo que se espera lograr al final de la intervención.</p>
+    </div>
+    <div class="strategic-narrative">
+      <b>Resumen narrativo:</b> Parroquias católicas, estudiantes universitarios y la organización de recicladores de base del noreste de Puebla (Puebla Recicla A.C.) participan activamente en un modelo comunitario de economía circular basado en valores compartidos.
+    </div>
+    <div class="strategic-grid" id="propGrid"></div>
+  </section>
+
+  <section id="componentes" class="panel">
+    <div class="level-intro">
+      <h2>Componentes</h2>
+      <p>Productos y servicios que el proyecto entrega para lograr el propósito.</p>
+    </div>
+    <div class="comp-grid" id="compGrid"></div>
+  </section>
+
+  <section id="actividades" class="panel">
+    <div class="level-intro">
+      <h2>Actividades</h2>
+      <p>Acciones específicas agrupadas por componente, con avance calculado como numerador sobre denominador.</p>
+    </div>
+    <div id="actContainer"></div>
+  </section>
+
+  <section id="avance" class="panel">
+    <div class="level-intro">
+      <h2>Avance total del proyecto</h2>
+      <p>Porcentaje de avance acumulado de las actividades de la matriz (cada actividad con tope de 100%).</p>
+    </div>
+    <div class="total-card">
+      <div class="total-main">
+        <span class="total-num" id="totNum"></span>
+        <span class="total-lbl" id="totLbl"></span>
+      </div>
+      <div class="barwrap total-bar"><div class="barfill" id="totBar"></div></div>
+      <div class="total-method"><b>Método de cálculo:</b> promedio simple del porcentaje de avance de todas las actividades (suma de los avances ÷ total de actividades). Cada actividad aporta su porcentaje, completa o parcial.</div>
+      <div class="total-alt" id="totAlt"></div>
+    </div>
+    <div class="comp-grid" id="totComp"></div>
+  </section>
+
+</main>
+
+<footer>
+  <b>Fuente:</b> MIR_corregida_octubre22v2_ETI.xlsx, pestaña "nuestros residuos" (matriz de indicadores de resultados, ETI &middot; Nuestros Residuos); Periodo 1, octubre de 2026. Indicadores, métodos de cálculo, numeradores y denominadores tomados de la hoja de captura; el avance de cada actividad es el valor de la hoja (numerador ÷ denominador × 100), con tope de 100%. El avance total es el promedio simple de todas las actividades; las que no tienen dato cuentan como 0.
+  <br><br>
+  <b>Nota metodológica:</b> este tablero se construyó con la metodología de marco lógico. La matriz se organiza en cuatro niveles (Fin, Propósito, Componentes y Actividades) con una lógica vertical en la que las actividades producen los componentes, los componentes logran el propósito y el propósito contribuye al fin. Cada nivel tiene resumen narrativo, indicador, método de cálculo y medio de verificación.
+  <br><br>
+  <span class="warn">Notas sobre datos para revisar en la fuente:</span>
+  <ul>
+    <li>A4.3 está pendiente de definir en la hoja (indicador ECOLANA).</li>
+    <li>A2.1 reporta 155.6% (70 de 45); en el avance se topa en 100%.</li>
+    <li>A2.4 reporta 113.3% (51 de 45); en el avance se topa en 100%.</li>
+    <li>Comp.2: la hoja muestra 50% y el promedio de sus actividades da 55.6%. El tablero muestra el valor de la hoja en Componentes y el promedio en Avance total.</li>
+    <li>Comp.3: la hoja muestra 14.3% y el promedio de sus actividades da 27.9%. El tablero muestra el valor de la hoja en Componentes y el promedio en Avance total.</li>
+    <li>A4.3 no tiene datos capturados; cuenta como 0% en el avance.</li>
+  </ul>
+</footer>
+
+<script>
+// ---------------- DATA (fuente: MIR_corregida_octubre22v2_ETI.xlsx, pestaña "nuestros residuos") ----------------
+const finData = [
+ {
+  "id": "Fin.1",
+  "name": "% de personas (estudiantes, comunidad católica y vecinos) que separan sus residuos en casa",
+  "value": 60,
+  "sub": "meta 75%"
+ },
+ {
+  "id": "Fin.2",
+  "name": "% de recicladores que califican su trabajo como muy estable o algo estable",
+  "value": 6.7,
+  "sub": "meta 15%"
+ },
+ {
+  "id": "Fin.3",
+  "name": "% de personas para quienes el cuidado del medio ambiente es muy importante o importante como parte de su fe",
+  "value": 86.7,
+  "sub": "meta 70%"
+ }
+];
+
+const propData = [
+ {
+  "id": "Prop.1",
+  "name": "% de personas que participarían si la parroquia organizara actividades de reciclaje",
+  "value": 83,
+  "sub": "meta 80%"
+ },
+ {
+  "id": "Prop.2",
+  "name": "% de personas que participan, con cualquier frecuencia, en actividades comunitarias relacionadas con el cuidado del medio ambiente",
+  "value": 46.7,
+  "sub": "meta 30%"
+ },
+ {
+  "id": "Prop.3",
+  "name": "% de recicladores que han participado en al menos una capacitación sobre reciclaje o economía circular",
+  "value": 36.7,
+  "sub": "meta 50%"
+ }
+];
+
+const compData = [
+ {
+  "id": "Comp.1",
+  "cls": "",
+  "title": "Componente 1 · Fase 1 Descubrimiento y co-diseño",
+  "name": "Fase 1, Descubrimiento y co-diseño, completada: actores mapeados, talleres co-diseñados y línea base levantada.",
+  "indicador": "% de actividades de la Fase 1 completadas",
+  "metodo": "Actividades completadas / actividades programadas de la Fase 1 × 100",
+  "value": 88.8889,
+  "sub": "8 de 9 · meta 100%"
+ },
+ {
+  "id": "Comp.2",
+  "cls": "c2",
+  "title": "Componente 2 · Fase 2 Implementación temprana",
+  "name": "Fase 2, Implementación temprana, completada: facilitadores universitarios capacitados e infraestructura de separación producida.",
+  "indicador": "% de actividades de la Fase 2 completadas",
+  "metodo": "Actividades completadas / actividades programadas de la Fase 2 × 100",
+  "value": 50,
+  "sub": "3 de 6 · meta 100%"
+ },
+ {
+  "id": "Comp.3",
+  "cls": "c3",
+  "title": "Componente 3 · Fase 3 Implementación piloto",
+  "name": "Fase 3, Implementación piloto, completada: parroquias activadas y organización de recicladores fortalecida.",
+  "indicador": "% de actividades de la Fase 3 completadas",
+  "metodo": "Actividades completadas / actividades programadas de la Fase 3 × 100",
+  "value": 14.2857,
+  "sub": "1 de 7 · meta 100%"
+ },
+ {
+  "id": "Comp.4",
+  "cls": "c4",
+  "title": "Componente 4 · Fase 4 Evaluación y sistematización",
+  "name": "Fase 4, Evaluación y sistematización, completada: evidencia generada y resultados comunicados.",
+  "indicador": "% de actividades de la Fase 4 completadas",
+  "metodo": "Actividades completadas / actividades programadas de la Fase 4 × 100",
+  "value": 0,
+  "sub": "0 de 1 · meta 100%"
+ }
+];
+
+// v = avance de la actividad (0 a 100, topado en 100)
+const actGroups = [
+ {
+  "compId": "Comp.1",
+  "cls": "",
+  "title": "Componente 1 · Fase 1 Descubrimiento y co-diseño",
+  "items": [
+   {
+    "id": "A1.1",
+    "name": "Mapeo de actores (parroquias y organización de recicladores) ejecutado.",
+    "ind": "Mapeo de actores completado (hecho / no hecho)",
+    "v": 100,
+    "frac": "1 de 1"
+   },
+   {
+    "id": "A1.2",
+    "name": "Parroquias piloto seleccionadas (15 parroquias, con participación de la diócesis).",
+    "ind": "% de parroquias seleccionadas",
+    "v": 100,
+    "frac": "15 de 15"
+   },
+   {
+    "id": "A1.3",
+    "name": "Socios del proyecto vinculados y alineados.",
+    "ind": "% de reuniones de vinculación realizadas",
+    "v": 100,
+    "frac": "3 de 3"
+   },
+   {
+    "id": "A1.4",
+    "name": "Visitas de campo a parroquias y a la organización de recicladores.",
+    "ind": "% de visitas de campo realizadas",
+    "v": 100,
+    "frac": "5 de 5"
+   },
+   {
+    "id": "A1.5",
+    "name": "Acercamiento con clero local y líderes de recicladores.",
+    "ind": "% de reuniones de vinculación realizadas",
+    "v": 100,
+    "frac": "3 de 3"
+   },
+   {
+    "id": "A1.6",
+    "name": "Establecimiento de colaboración con autoridades municipales de residuos.",
+    "ind": "% de reuniones realizadas",
+    "v": 0,
+    "frac": "0 de 1"
+   },
+   {
+    "id": "A1.7",
+    "name": "Manual/cuadernillo para capacitaciones co-diseñado con el Instituto de Promoción del Bien Común y grupo académico de la UPAEP.",
+    "ind": "Manual para capacitaciones, co-diseñado con IPBC/UPAEP, concluido (hecho / no hecho)",
+    "v": 100,
+    "frac": "1 de 1"
+   },
+   {
+    "id": "A1.8",
+    "name": "Infraestructura de separación de residuos para parroquias diseñada.",
+    "ind": "% de componentes de diseño desarrollados",
+    "v": 100,
+    "frac": "1 de 1"
+   },
+   {
+    "id": "A1.9",
+    "name": "Levantamiento de la encuesta de línea base (MEL).",
+    "ind": "Línea base levantada (hecho / no hecho)",
+    "v": 100,
+    "frac": "1 de 1"
+   }
+  ]
+ },
+ {
+  "compId": "Comp.2",
+  "cls": "c2",
+  "title": "Componente 2 · Fase 2 Implementación temprana",
+  "items": [
+   {
+    "id": "A2.1",
+    "name": "Estudiantes de la UPAEP capacitados como facilitadores ambientales.",
+    "ind": "% de estudiantes capacitados",
+    "v": 100,
+    "frac": "70 de 45 (rebasa la meta, se topa en 100%)"
+   },
+   {
+    "id": "A2.1b",
+    "name": "Capacitación de estudiantes evaluada.",
+    "ind": "% de estudiantes que califican la capacitación como muy útil o algo útil",
+    "v": 33.3,
+    "frac": "33.3 de 100"
+   },
+   {
+    "id": "A2.2",
+    "name": "Contenidos diseñados para su uso en comunidades católicas.",
+    "ind": "% de contenidos diseñados",
+    "v": 100,
+    "frac": "3 de 3"
+   },
+   {
+    "id": "A2.3",
+    "name": "Participación de los recicladores de base en las capacitaciones de la iglesia.",
+    "ind": "% de participaciones realizadas",
+    "v": 0,
+    "frac": "0 de 15"
+   },
+   {
+    "id": "A2.4",
+    "name": "Infraestructura de separación de residuos producida.",
+    "ind": "% de infraestructura producida",
+    "v": 100,
+    "frac": "51 de 45 (rebasa la meta, se topa en 100%)"
+   },
+   {
+    "id": "A2.5",
+    "name": "Evaluación de seguimiento MEL aplicada.",
+    "ind": "Encuesta de seguimiento levantada (hecho / no hecho)",
+    "v": 0,
+    "frac": "0 de 1"
+   }
+  ]
+ },
+ {
+  "compId": "Comp.3",
+  "cls": "c3",
+  "title": "Componente 3 · Fase 3 Implementación piloto",
+  "items": [
+   {
+    "id": "A3.1",
+    "name": "Capacitaciones sobre separación de residuos impartidas en parroquias.",
+    "ind": "% de capacitaciones realizadas",
+    "v": 22.2222,
+    "frac": "10 de 45"
+   },
+   {
+    "id": "A3.2",
+    "name": "Infraestructura de separación en parroquias piloto instalada.",
+    "ind": "% de parroquias con infraestructura instalada",
+    "v": 73.3333,
+    "frac": "11 de 15"
+   },
+   {
+    "id": "A3.4",
+    "name": "Gobernanza organizativa de Puebla Recicla A.C. fortalecida.",
+    "ind": "Acciones de gobernanza implementadas (hecho / no hecho)",
+    "v": 0,
+    "frac": "0 de 1"
+   },
+   {
+    "id": "A3.5",
+    "name": "Equipo de seguridad y herramientas de trabajo entregado.",
+    "ind": "% de equipos entregados",
+    "v": 0,
+    "frac": "0 de 15"
+   },
+   {
+    "id": "A3.6",
+    "name": "Apoyo para el Centro Comunitario de Valorización de Residuos (CCVR) de Puebla Recicla.",
+    "ind": "Apoyo al CCVR entregado (hecho / no hecho)",
+    "v": 100,
+    "frac": "1 de 1"
+   },
+   {
+    "id": "A3.8",
+    "name": "Proyecto presentado a autoridades locales.",
+    "ind": "% de autoridades objetivo que recibieron la presentación",
+    "v": 0,
+    "frac": "0 de 3"
+   },
+   {
+    "id": "A3.9",
+    "name": "Encuesta de seguimiento aplicada.",
+    "ind": "Encuesta de seguimiento levantada (hecho / no hecho)",
+    "v": 0,
+    "frac": "0 de 1"
+   }
+  ]
+ },
+ {
+  "compId": "Comp.4",
+  "cls": "c4",
+  "title": "Componente 4 · Fase 4 Evaluación y sistematización",
+  "items": [
+   {
+    "id": "A4.1",
+    "name": "Evaluación final (endline) aplicada.",
+    "ind": "Encuesta endline aplicada (hecho / no hecho)",
+    "v": 0,
+    "frac": "0 de 1"
+   },
+   {
+    "id": "A4.2",
+    "name": "Evaluación de las acciones del programa completada.",
+    "ind": "Documento de evaluación final del proyecto concluido (hecho / no hecho)",
+    "v": 0,
+    "frac": "0 de 1"
+   },
+   {
+    "id": "A4.3",
+    "name": "Incremento en el volumen de material reciclable recibido por la organización de recicladores cuantificado.",
+    "ind": "Incremento en el volumen de material recibido en el periodo (por definir)",
+    "v": 0,
+    "frac": "0"
+   },
+   {
+    "id": "A4.4",
+    "name": "Resultados comunicados a autoridades municipales y/o medios.",
+    "ind": "% de actores informados",
+    "v": 0,
+    "frac": "0 de 1"
+   }
+  ]
+ }
+];
+
+// ---------------- RENDER ----------------
+const fmt = v => (Math.round(v*10)/10).toString();
+
+function renderStrategic(container, data, toneClass){
+  container.innerHTML = data.map(d => {
+    const has = d.value !== null;
+    return `
+    <div class="strategic-card ${toneClass}">
+      <span class="idtag">${d.id}</span>
+      <p class="ind-name">${d.name}</p>
+      <div class="bignum-row">
+        <span class="bignum ${has ? "" : "nodata"}">${has ? fmt(d.value)+"%" : "Sin dato"}</span>
+      </div>
+      <div class="barwrap">
+        <div class="barfill" style="width:${has ? Math.max(0,Math.min(d.value,100)) : 0}%"></div>
+      </div>
+      <div class="goal">${d.sub}</div>
+    </div>`;
+  }).join("");
+}
+renderStrategic(document.getElementById("finGrid"), finData, "");
+renderStrategic(document.getElementById("propGrid"), propData, "tone-mint");
+
+document.getElementById("compGrid").innerHTML = compData.map(c => `
+  <div class="comp-card ${c.cls}">
+    <span class="idtag">${c.id} &middot; ${c.title}</span>
+    <h3>${c.name}</h3>
+    <div class="comp-field">
+      <div class="label">Indicador</div>
+      <div class="value">${c.indicador}</div>
+    </div>
+    <div class="comp-field">
+      <div class="label">Método de cálculo</div>
+      <div class="value">${c.metodo}</div>
+    </div>
+    <div class="comp-progress-row">
+      <span class="pct">${fmt(c.value)}%</span>
+      <div class="barwrap"><div class="barfill" style="width:${c.value}%"></div></div>
+    </div>
+    <div class="comp-sub">${c.sub}</div>
+  </div>
+`).join("");
+
+document.getElementById("actContainer").innerHTML = actGroups.map(g => `
+  <div class="act-group ${g.cls}">
+    <div class="act-group-head">
+      <span class="dot"></span>
+      <h3>${g.title}</h3>
+      <span class="compid">${g.compId}</span>
+    </div>
+    <table class="act-table">
+      <thead>
+        <tr><th style="width:60px;">ID</th><th>Actividad</th><th>Indicador</th><th class="act-bar-cell">Avance</th></tr>
+      </thead>
+      <tbody>
+        ${g.items.map(a => { const v = a.v; return `
+          <tr>
+            <td class="act-id">${a.id}</td>
+            <td class="act-name">${a.name}</td>
+            <td class="act-ind">${a.ind}</td>
+            <td class="act-bar-cell">
+              <div class="act-bar-row">
+                <div class="act-barwrap"><div class="act-barfill" style="width:${Math.min(v,100)}%"></div></div>
+                <span class="act-pct">${fmt(v)}%</span>
+              </div>
+              <div class="act-frac">${a.frac}</div>
+            </td>
+          </tr>`; }).join("")}
+      </tbody>
+    </table>
+  </div>
+`).join("");
+
+// ---------------- AVANCE TOTAL ----------------
+(function(){
+  const all = actGroups.flatMap(g => g.items);
+  const done = all.filter(a => a.v >= 100).length;
+  const pct = all.reduce((s,a) => s + a.v, 0) / all.length;
+  document.getElementById("totNum").textContent = fmt(pct) + "%";
+  document.getElementById("totLbl").textContent = "avance promedio de " + all.length + " actividades";
+  document.getElementById("totBar").style.width = pct + "%";
+  document.getElementById("totAlt").textContent = done + " de " + all.length + " actividades están completadas al 100%.";
+  document.getElementById("totComp").innerHTML = actGroups.map(g => {
+    const d = g.items.filter(a => a.v >= 100).length;
+    const p = g.items.reduce((s,a) => s + a.v, 0) / g.items.length;
+    return `
+    <div class="comp-card ${g.cls}">
+      <span class="idtag">${g.compId}</span>
+      <h3>${g.title}</h3>
+      <div class="comp-progress-row">
+        <span class="pct">${fmt(p)}%</span>
+        <div class="barwrap"><div class="barfill" style="width:${p}%"></div></div>
+      </div>
+      <div class="comp-sub">${d} de ${g.items.length} actividades completadas al 100%</div>
+    </div>`;
+  }).join("");
+})();
+
+// ---------------- TABS ----------------
+document.querySelectorAll(".tabbtn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".tabbtn").forEach(b => b.classList.remove("active"));
+    document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+    btn.classList.add("active");
+    document.getElementById(btn.dataset.tab).classList.add("active");
+  });
+});
+</script>
+
+</body>
+</html>
